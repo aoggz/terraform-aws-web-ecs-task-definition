@@ -1,5 +1,11 @@
+data "aws_region" "current" {}
+
 resource "aws_ecr_repository" "web" {
   name = "${var.resource_prefix}-${terraform.workspace}/web"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 }
 
 resource "null_resource" "publish_web_docker_image" {
