@@ -11,8 +11,8 @@ resource "aws_ecr_repository" "web" {
 resource "null_resource" "publish_web_docker_image" {
   provisioner "local-exec" {
     command = <<EOF
-$(aws ecr get-login --no-include-email --region us-east-1) && \
-docker tag $LOCAL_TAG $TAG && \
+$(aws ecr get-login --no-include-email --region us-east-1) || aws ecr get-login-password | docker login --username AWS --password-stdin ${aws_ecr_repository.web.repository_url};
+docker tag $LOCAL_TAG $TAG;
 docker push $TAG
 EOF
 
